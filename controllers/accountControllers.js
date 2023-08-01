@@ -1,4 +1,4 @@
-const Account = require("../models/Account");
+const Account = require("../models/account");
 const { genSaltSync, hashSync, compareSync } = require("bcrypt");
 const { sign } = require("jsonwebtoken");
 const { json } = require("express");
