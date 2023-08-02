@@ -21,7 +21,7 @@ app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/jobs", jobsRouter);
 app.use("/accounts", accountsRouter);
-app.set('view engine', 'jade');
+app.set("view engine", "ejs");
 connection.connect(function (err) {
    if (err) {
       return console.error("error: " + err.message);
