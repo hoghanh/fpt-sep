@@ -6,7 +6,10 @@ var logger = require("morgan");
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 var jobsRouter = require("./routes/jobs");
-var accountsRouter = require("./routes/accounts");
+
+var accountsRouter = require("./routes/accountRouter");
+var categoryRouter = require("./routes/categoryRouter");
+var subCategoryRouter = require("./routes/subCategoryRouter");
 
 const connection = require("./config/db");
 var app = express();
@@ -20,7 +23,11 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/jobs", jobsRouter);
+
 app.use("/accounts", accountsRouter);
+app.use("/category", categoryRouter);
+app.use("/subCategory", subCategoryRouter);
+
 app.set("view engine", "ejs");
 connection.connect(function (err) {
    if (err) {
