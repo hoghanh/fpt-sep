@@ -3,7 +3,7 @@ const db = require("../models");
 
 // create main Model
 const SubCategory = db.subCategorys;
-
+const Category = db.categorys;
 // main work
 
 // 1. create SubCategory
@@ -57,9 +57,24 @@ const updateSubCategory = async (req, res) => {
    }
 };
 
+const getSubCategoryWithCategory = async (req, res) => {
+   const data = await SubCategory.findOne({
+      include: [
+         {
+            model: Category,
+            as: "categorys",
+         },
+      ],
+      where: { id: req.params.subCategoryID },
+   });
+
+   res.status(200).send(data);
+};
+
 module.exports = {
    createSubCategory,
    getSubCategoryById,
    getAllSubCategory,
    updateSubCategory,
+   getSubCategoryWithCategory,
 };

@@ -16,4 +16,5 @@ router
    .get(accountController.getAccountById)
    .post(accountController.updateAccount);
 
+router.route("/job/:accountID").get(accountController.getAccountWithJobId);
 module.exports = router;

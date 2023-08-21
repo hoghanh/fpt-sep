@@ -13,4 +13,8 @@ router
    .get(subCategoryController.getSubCategoryById)
    .post(subCategoryController.updateSubCategory);
 
+router
+   .route("/category/:subCategoryID")
+   .get(subCategoryController.getSubCategoryWithCategory);
+
 module.exports = router;

@@ -12,7 +12,7 @@ const Account = db.accounts;
 const createJob = async (req, res) => {
    try {
       let info = {
-         title: req.body.name,
+         title: req.body.title,
          description: req.body.description,
          duration: req.body.duration,
          scope: req.body.scope,
@@ -21,8 +21,8 @@ const createJob = async (req, res) => {
          status: req.body.status ? req.body.status : false,
       };
 
-      const Job = await Job.create(info);
-      res.status(200).send(Job);
+      const job = await Job.create(info);
+      res.status(200).send(job);
       console.log(Job);
    } catch (error) {
       console.log(error);
@@ -77,10 +77,24 @@ const getJobWithClientId = async (req, res) => {
    res.status(200).send(data);
 };
 
+// Add job to favorite
+const addFavoriteJob = async (req, res) => {
+   const job = await Job.findOne({
+      where: { id: req.params.jobID },
+   });
+   const account = await Account.findOne({
+      where: { id: req.body.accountId },
+   });
+   job.addAccount(account);
+
+   res.status(200).send(job);
+};
+
 module.exports = {
    createJob,
    getJobById,
    getAllJob,
    updateJob,
    getJobWithClientId,
+   addFavoriteJob,
 };

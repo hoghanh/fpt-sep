@@ -3,13 +3,10 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 
-var indexRouter = require("./routes/index");
-var usersRouter = require("./routes/users");
-var jobsRouter = require("./routes/jobs");
-
 var accountsRouter = require("./routes/accountRouter");
 var categoryRouter = require("./routes/categoryRouter");
 var subCategoryRouter = require("./routes/subCategoryRouter");
+var jobRouter = require("./routes/jobRouter");
 
 const connection = require("./config/db");
 var app = express();
@@ -20,15 +17,15 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use("/", indexRouter);
-app.use("/users", usersRouter);
-app.use("/jobs", jobsRouter);
-
+// router
 app.use("/accounts", accountsRouter);
 app.use("/category", categoryRouter);
 app.use("/subCategory", subCategoryRouter);
+app.use("/job", jobRouter);
 
+// view
 app.set("view engine", "ejs");
+
 connection.connect(function (err) {
    if (err) {
       return console.error("error: " + err.message);

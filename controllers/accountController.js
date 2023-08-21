@@ -5,7 +5,7 @@ const { sign } = require("jsonwebtoken");
 
 // create main Model
 const Account = db.accounts;
-
+const Job = db.jobs;
 // main work
 
 // 1. create account
@@ -101,10 +101,25 @@ const login = async (req, res) => {
       console.log(error);
    }
 };
+
+const getAccountWithJobId = async (req, res) => {
+   const data = await Account.findAll({
+      include: [
+         {
+            model: Job,
+            as: "jobs",
+         },
+      ],
+      where: { id: req.params.accountID },
+   });
+
+   res.status(200).send(data);
+};
 module.exports = {
    createAccount,
    getAccountById,
    getAllAccount,
    updateAccount,
+   getAccountWithJobId,
    login,
 };
