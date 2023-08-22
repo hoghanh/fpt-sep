@@ -95,10 +95,10 @@ const paginationJob = async (req, res) => {
    let limit = req.body.limit ? req.body.limit : 10;
    req.body.page = req.body.page ? req.body.page : 1;
    let offset = 0 + (req.body.page - 1) * limit;
-   const job = Job.findAndCountAll({
+   const job = await Job.findAndCountAll({
       offset: offset,
       limit: limit,
-      order: [["date", "ASC"]],
+      order: [["updatedAt", "ASC"]],
    });
 
    res.status(200).send(job);
