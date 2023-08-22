@@ -90,6 +90,20 @@ const addFavoriteJob = async (req, res) => {
    res.status(200).send(job);
 };
 
+// get job pagination
+const paginationJob = async (req, res) => {
+   let limit = req.body.limit ? req.body.limit : 10;
+   req.body.page = req.body.page ? req.body.page : 1;
+   let offset = 0 + (req.body.page - 1) * limit;
+   const job = Job.findAndCountAll({
+      offset: offset,
+      limit: limit,
+      order: [["date", "ASC"]],
+   });
+
+   res.status(200).send(job);
+};
+
 module.exports = {
    createJob,
    getJobById,
@@ -97,4 +111,5 @@ module.exports = {
    updateJob,
    getJobWithClientId,
    addFavoriteJob,
+   paginationJob,
 };
