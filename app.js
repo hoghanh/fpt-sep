@@ -10,7 +10,8 @@ var jobRouter = require("./routes/jobRouter");
 
 const connection = require("./config/db");
 var app = express();
-var cors = require("cors");
+
+app.use(cors())
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
