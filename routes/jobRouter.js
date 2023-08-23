@@ -6,6 +6,7 @@ const router = require("express").Router();
 
 // use routers
 router.post("/create", jobController.createJob);
+
 router.route("/all").get(jobController.getAllJob);
 router.route("/page").post(jobController.paginationJob);
 router.route("/category").get(jobController.getJobByCategory);

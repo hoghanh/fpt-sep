@@ -8,6 +8,7 @@ const router = require("express").Router();
 
 // use routers
 router.post("/create", accountController.createAccount);
+router.post("/register", accountController.register);
 router.route("/login").post(accountController.login);
 router.route("/").get(checkToken, accountController.getAllAccount);
 

@@ -2,7 +2,7 @@ var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
-
+var cors = require("cors");
 var accountsRouter = require("./routes/accountRouter");
 var categoryRouter = require("./routes/categoryRouter");
 var subCategoryRouter = require("./routes/subCategoryRouter");
@@ -10,7 +10,7 @@ var jobRouter = require("./routes/jobRouter");
 
 const connection = require("./config/db");
 var app = express();
-
+var cors = require("cors");
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

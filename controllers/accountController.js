@@ -6,9 +6,11 @@ const { sign } = require("jsonwebtoken");
 // create main Model
 const Account = db.accounts;
 const Job = db.jobs;
+const Freelancer = db.freelancers;
+const Client = db.clients;
 // main work
 
-// 1. create account
+// 1. create account for admin only
 
 const createAccount = async (req, res) => {
    try {
@@ -33,6 +35,61 @@ const createAccount = async (req, res) => {
    } catch (error) {
       console.log(error);
    }
+};
+
+const register = async (req, res) => {
+   try {
+      let info = {
+         name: req.body.name,
+         email: req.body.email,
+         password: req.body.password,
+         role: req.body.role,
+         currency: 0,
+         status: true,
+      };
+      // check dulicate
+      if (
+         (checkEmailDulicate = await Account.findOne({
+            where: { email: req.body.email },
+         }))
+      ) {
+         throw new Error("Email has already used");
+      }
+
+      // validate email
+      if (!validateEmail(info.email)) {
+         res.status(200).json({ message: "invalid email" });
+      }
+
+      // decode password
+      const salt = genSaltSync(10);
+      info.password = hashSync(req.body.password, salt);
+
+      // create account
+      const account = await Account.create(info);
+      res.status(200).json({ message: "account created" });
+
+      // add account to role table
+      if (req.body.role === "freelancer") {
+         const freelancer = await Freelancer.create({ status: true });
+         account.setFreelancers(freelancer);
+      } else if (req.body.role === "client") {
+         const client = await Client.create({ status: true });
+         account.setClients(client);
+      } else {
+         throw new Error("must have role");
+      }
+      console.log(account);
+   } catch (error) {
+      console.log(error);
+      res.status(200).json({ message: error.toString() });
+   }
+};
+
+const validateEmail = (email) => {
+   return email.match(
+      /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+   );
 };
 
 // 2. get all account
@@ -70,6 +127,7 @@ const updateAccount = async (req, res) => {
 const login = async (req, res) => {
    try {
       const account = await Account.findOne({
+         attributes: { exclude: ["createdAt", "updatedAt"] },
          where: { email: req.body.email },
       });
       console.log(account);
@@ -79,7 +137,6 @@ const login = async (req, res) => {
             message: "invalid Email",
          });
       }
-      console.log(req.body.password);
 
       const checkPassword = compareSync(req.body.password, account.password);
       if (checkPassword) {
@@ -117,6 +174,7 @@ const getAccountWithJobId = async (req, res) => {
 };
 module.exports = {
    createAccount,
+   register,
    getAccountById,
    getAllAccount,
    updateAccount,

@@ -40,7 +40,7 @@ db.jobs = require("./jobModel")(sequelize, DataTypes);
 db.clients = require("./clientModel")(sequelize, DataTypes);
 db.freelancers = require("./freelancerModel")(sequelize, DataTypes);
 
-db.sequelize.sync({ force: false }).then(() => {
+db.sequelize.sync({ force: false, alter: true }).then(() => {
    console.log("yes re-sync done!");
 });
 
@@ -89,7 +89,7 @@ db.jobs.belongsTo(db.clients, {
    as: "accounts",
 });
 
-// job category
+// job_category
 db.categorys.hasMany(db.jobs, {
    foreignKey: "category_id",
    as: "jobs",
