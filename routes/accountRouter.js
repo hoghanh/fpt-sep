@@ -12,7 +12,7 @@ router.route("/login").post(accountController.login);
 router.route("/").get(checkToken, accountController.getAllAccount);
 
 router
-   .route("/:accountID")
+   .route("/profile/:accountID")
    .get(accountController.getAccountById)
    .post(accountController.updateAccount);
 

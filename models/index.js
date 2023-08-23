@@ -1,6 +1,6 @@
 const dbConfig = require("../config/dbConfig.js");
 
-const { Sequelize, DataTypes } = require("sequelize");
+const { Sequelize, DataTypes, Op } = require("sequelize");
 
 const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
    host: dbConfig.HOST,
@@ -28,6 +28,8 @@ const db = {};
 
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
+
+db.Op = Op;
 
 // model
 
@@ -85,6 +87,17 @@ db.clients.hasMany(db.jobs, {
 db.jobs.belongsTo(db.clients, {
    foreignKey: "client_id",
    as: "accounts",
+});
+
+// job category
+db.categorys.hasMany(db.jobs, {
+   foreignKey: "category_id",
+   as: "jobs",
+});
+
+db.jobs.belongsTo(db.categorys, {
+   foreignKey: "category_id",
+   as: "categorys",
 });
 
 // Many to Many relation

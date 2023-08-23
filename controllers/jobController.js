@@ -1,9 +1,11 @@
 const db = require("../models");
+
 // image Upload
 
 // create main Model
 const Job = db.jobs;
 const Account = db.accounts;
+const Category = db.categorys;
 
 // main work
 
@@ -104,6 +106,25 @@ const paginationJob = async (req, res) => {
    res.status(200).send(job);
 };
 
+// get job by category
+const getJobByCategory = async (req, res) => {
+   const data = await Job.findAll({
+      include: [
+         {
+            model: Category,
+            as: "categorys",
+            where: {
+               name: {
+                  [db.Op.like]: `%${req.body.categoryName}`,
+               },
+            },
+         },
+      ],
+   });
+
+   res.status(200).send(data);
+};
+
 module.exports = {
    createJob,
    getJobById,
@@ -112,4 +133,5 @@ module.exports = {
    getJobWithClientId,
    addFavoriteJob,
    paginationJob,
+   getJobByCategory,
 };

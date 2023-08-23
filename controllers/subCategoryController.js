@@ -28,7 +28,14 @@ const createSubCategory = async (req, res) => {
 // 2. get all SubCategory
 const getAllSubCategory = async (req, res) => {
    try {
-      let subCategorys = await SubCategory.findAll({});
+      let subCategorys = await SubCategory.findAll({
+         include: [
+            {
+               model: Category,
+               as: "categorys",
+            },
+         ],
+      });
       res.status(200).send(subCategorys);
    } catch (error) {
       console.log(error);
