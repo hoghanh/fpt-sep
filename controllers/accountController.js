@@ -12,30 +12,30 @@ const Client = db.clients;
 
 // 1. create account for admin only
 
-const createAccount = async (req, res) => {
-   try {
-      let info = {
-         name: req.body.name,
-         phone: req.body.phone,
-         email: req.body.email,
-         address: req.body.address,
-         image: req.body.image,
-         password: req.body.password,
-         role: req.body.role,
-         currency: req.body.currency,
-         status: req.body.status ? req.body.status : false,
-      };
+// const createAccount = async (req, res) => {
+//    try {
+//       let info = {
+//          name: req.body.name,
+//          phone: req.body.phone,
+//          email: req.body.email,
+//          address: req.body.address,
+//          image: req.body.image,
+//          password: req.body.password,
+//          role: req.body.role,
+//          currency: req.body.currency,
+//          status: req.body.status ? req.body.status : false,
+//       };
 
-      const salt = genSaltSync(10);
-      info.password = hashSync(req.body.password, salt);
+//       const salt = genSaltSync(10);
+//       info.password = hashSync(req.body.password, salt);
 
-      const account = await Account.create(info);
-      res.status(200).send(account);
-      console.log(account);
-   } catch (error) {
-      console.log(error);
-   }
-};
+//       const account = await Account.create(info);
+//       res.status(200).send(account);
+//       console.log(account);
+//    } catch (error) {
+//       console.log(error);
+//    }
+// };
 
 const register = async (req, res) => {
    try {
@@ -56,10 +56,17 @@ const register = async (req, res) => {
          throw new Error("Email has already used");
       }
 
-      // validate email
-      if (!validateEmail(info.email)) {
-         res.status(200).json({ message: "invalid email" });
+      const confirmPass = req.body.confirmPass
+
+      // Check pasword & confirm Password
+      if (confirmPass !== info.password) {
+         throw new Error("Password not match");
       }
+
+      // validate email
+      // if (!validateEmail(info.email)) {
+      //    res.status(200).json({ message: "invalid email" });
+      // }
 
       // decode password
       const salt = genSaltSync(10);
@@ -67,7 +74,7 @@ const register = async (req, res) => {
 
       // create account
       const account = await Account.create(info);
-      res.status(200).json({ message: "account created" });
+      res.status(200).json({ message: "Account created" });
 
       // add account to role table
       if (req.body.role === "freelancer") {
@@ -77,20 +84,20 @@ const register = async (req, res) => {
          const client = await Client.create({ status: true });
          account.setClients(client);
       } else {
-         throw new Error("must have role");
+         throw new Error("Account must have role");
       }
-      console.log(account);
+      console.log(account.dataValues);
    } catch (error) {
       console.log(error);
       res.status(200).json({ message: error.toString() });
    }
 };
 
-const validateEmail = (email) => {
-   return email.match(
-      /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-   );
-};
+// const validateEmail = (email) => {
+//    return email.match(
+//       /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+//    );
+// };
 
 // 2. get all account
 const getAllAccount = async (req, res) => {
@@ -173,7 +180,6 @@ const getAccountWithJobId = async (req, res) => {
    res.status(200).send(data);
 };
 module.exports = {
-   createAccount,
    register,
    getAccountById,
    getAllAccount,
