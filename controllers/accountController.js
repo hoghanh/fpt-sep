@@ -41,7 +41,7 @@ const register = async (req, res) => {
       console.log(account.dataValues);
    } catch (error) {
       console.log(error);
-      res.status(200).json({ message: error.toString() });
+      res.status(400).json({ message: error.toString() });
    }
 };
 
