@@ -27,7 +27,7 @@ const register = async (req, res) => {
             where: { email: req.body.email },
          }))
       ) {
-         throw new Error("Email has already used");
+         throw new Error("Tài khoản email này đã được sử dụng!");
       }
 
       // decode password
@@ -36,7 +36,7 @@ const register = async (req, res) => {
 
       // create account
       const account = await Account.create(info);
-      res.status(200).json({ message: "Account created" });
+      res.status(200).json({ message: "Tài khoản đã được tạo!" });
 
       console.log(account.dataValues);
    } catch (error) {
@@ -87,7 +87,7 @@ const login = async (req, res) => {
 
       if (!account) {
          return res.json({
-            message: "invalid Email",
+            message: "Email không khả dụng!",
          });
       }
 
@@ -98,13 +98,13 @@ const login = async (req, res) => {
          });
          res.status(201).json({
             success: 1,
-            message: "login successfully",
+            message: "Đăng nhập thành công!",
             token: jsontoken,
             account: account,
          });
       } else {
          res.status(403).json({
-            message: "login fail",
+            message: "Đăng nhập không thành công!",
          });
       }
    } catch (error) {
