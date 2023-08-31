@@ -17,7 +17,7 @@ const register = async (req, res) => {
          name: req.body.name,
          email: req.body.email,
          password: req.body.password,
-         role: "client",
+         role: req.body.role ? req.body.role : "client",
          currency: 0,
          status: true,
       };
@@ -36,8 +36,15 @@ const register = async (req, res) => {
 
       // create account
       const account = await Account.create(info);
-      res.status(200).json({ message: "Tài khoản đã được tạo!" });
 
+      if (info.role === "client") {
+         const client = await Client.create({ status: "true" });
+         account.setClients(client);
+      } else if (info.role === "freelancer") {
+         const freelancer = await Freelancer.create({ status: "true" });
+         account.setFreelancers(freelancer);
+      }
+      res.status(200).json({ message: "Tài khoản đã được tạo!" });
       console.log(account.dataValues);
    } catch (error) {
       console.log(error);
@@ -86,7 +93,7 @@ const login = async (req, res) => {
       console.log(account);
 
       if (!account) {
-         return res.json({
+         return res.status(400).json({
             message: "Email không khả dụng!",
          });
       }
