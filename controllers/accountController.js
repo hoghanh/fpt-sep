@@ -93,7 +93,7 @@ const login = async (req, res) => {
       console.log(account);
 
       if (!account) {
-         return res.json({
+         return res.status(400).json({
             message: "Email không khả dụng!",
          });
       }
