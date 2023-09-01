@@ -1,6 +1,7 @@
 const db = require("../models");
 const { genSaltSync, hashSync, compareSync } = require("bcrypt");
 const { sign } = require("jsonwebtoken");
+
 // image Upload
 
 // create main Model
@@ -119,6 +120,14 @@ const login = async (req, res) => {
    }
 };
 
+const isLoggedIn = (req, res, next) => {
+   req.user ? next() : res.sendStatus(401);
+};
+
+const loginGoogle = (req, res) => {
+   console.log(req.user._json);
+   res.status(200).send(req.user._json);
+};
 const getAccountWithJobId = async (req, res) => {
    const data = await Account.findAll({
       include: [
@@ -139,4 +148,6 @@ module.exports = {
    updateAccount,
    getAccountWithJobId,
    login,
+   isLoggedIn,
+   loginGoogle,
 };

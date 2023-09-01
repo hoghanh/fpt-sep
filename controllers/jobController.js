@@ -6,7 +6,7 @@ const db = require("../models");
 const Job = db.jobs;
 const Account = db.accounts;
 const Category = db.categorys;
-
+const SubCategory = db.subCategorys;
 // main work
 
 // 1. create Job
@@ -20,12 +20,18 @@ const createJob = async (req, res) => {
          scope: req.body.scope,
          endDate: req.body.endDate,
          fee: req.body.fee,
+         client_id: req.body.client_id,
          status: req.body.status ? req.body.status : false,
       };
+      subCategoryList = req.body.subCategory;
 
       const job = await Job.create(info);
-      res.status(200).send(job);
+      subCategoryList.forEach(async (item) => {
+         const subCategory = await SubCategory.findOne({ name: item });
+         subCategory.addJobs(job);
+      });
       console.log(Job);
+      res.status(200).send("job Created");
    } catch (error) {
       console.log(error);
    }
