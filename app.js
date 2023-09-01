@@ -3,6 +3,10 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 var cors = require("cors");
+
+const passport = require("passport");
+const session = require("express-session");
+
 var accountsRouter = require("./routes/accountRouter");
 var categoryRouter = require("./routes/categoryRouter");
 var subCategoryRouter = require("./routes/subCategoryRouter");
@@ -11,7 +15,19 @@ var jobRouter = require("./routes/jobRouter");
 const connection = require("./config/db");
 var app = express();
 
-app.use(cors())
+app.use(
+   session({
+      secret: "mysecret",
+      resave: false,
+      saveUninitialized: true,
+      cookie: { secure: false },
+   })
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.use(cors());
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

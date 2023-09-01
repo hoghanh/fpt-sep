@@ -40,6 +40,12 @@ db.jobs = require("./jobModel")(sequelize, DataTypes);
 db.clients = require("./clientModel")(sequelize, DataTypes);
 db.freelancers = require("./freelancerModel")(sequelize, DataTypes);
 
+// many many table
+
+db.jobSubcategory = require("./jobSubcategoryModel")(sequelize, DataTypes);
+db.favorite = require("./favoriteModel")(sequelize, DataTypes);
+// creation
+
 db.sequelize.sync({ force: false, alter: true }).then(() => {
    console.log("yes re-sync done!");
 });
@@ -89,19 +95,11 @@ db.jobs.belongsTo(db.clients, {
    as: "accounts",
 });
 
-// job_category
-db.categorys.hasMany(db.jobs, {
-   foreignKey: "category_id",
-   as: "jobs",
-});
-
-db.jobs.belongsTo(db.categorys, {
-   foreignKey: "category_id",
-   as: "categorys",
-});
-
 // Many to Many relation
-db.jobs.belongsToMany(db.accounts, { through: "favorite" });
-db.accounts.belongsToMany(db.jobs, { through: "favorite" });
+db.jobs.belongsToMany(db.accounts, { through: db.favorite });
+db.accounts.belongsToMany(db.jobs, { through: db.favorite });
+
+db.jobs.belongsToMany(db.subCategorys, { through: db.jobSubcategory });
+db.subCategorys.belongsToMany(db.jobs, { through: db.jobSubcategory });
 
 module.exports = db;
