@@ -100,9 +100,13 @@ const addFavoriteJob = async (req, res) => {
 
 // get job pagination
 const paginationJob = async (req, res) => {
-   let limit = req.body.limit ? req.body.limit : 10;
-   req.body.page = req.body.page ? req.body.page : 1;
-   let offset = 0 + (req.body.page - 1) * limit;
+   reqLimit = Number(req.params.limit);
+   reqPage = Number(req.params.page);
+
+   let limit = reqLimit ? reqLimit : 10;
+   let page = reqPage ? reqPage : 1;
+
+   let offset = 0 + (page - 1) * limit;
    const job = await Job.findAndCountAll({
       offset: offset,
       limit: limit,
