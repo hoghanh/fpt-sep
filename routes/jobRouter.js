@@ -8,7 +8,7 @@ const router = require("express").Router();
 router.post("/create", jobController.createJob);
 
 router.route("/all").get(jobController.getAllJob);
-router.route("/page").post(jobController.paginationJob);
+router.route("/page/limit=:limit&page=:page").get(jobController.paginationJob);
 router.route("/category").get(jobController.getJobByCategory);
 
 router.route("/client/:jobID").get(jobController.getJobWithClientId);

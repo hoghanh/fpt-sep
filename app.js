@@ -4,8 +4,8 @@ var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 var cors = require("cors");
 
-const passport = require("passport");
-const session = require("express-session");
+var passport = require("passport");
+var session = require("cookie-session");
 
 var accountsRouter = require("./routes/accountRouter");
 var categoryRouter = require("./routes/categoryRouter");
