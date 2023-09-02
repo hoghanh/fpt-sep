@@ -7,6 +7,7 @@ const Job = db.jobs;
 const Account = db.accounts;
 const Category = db.categorys;
 const SubCategory = db.subCategorys;
+const Client = db.clients;
 // main work
 
 // 1. create Job
@@ -100,14 +101,22 @@ const addFavoriteJob = async (req, res) => {
 
 // get job pagination
 const paginationJob = async (req, res) => {
-   reqLimit = Number(req.params.limit);
-   reqPage = Number(req.params.page);
+   reqLimit = Number(req.query.limit);
+   reqPage = Number(req.query.page);
 
    let limit = reqLimit ? reqLimit : 10;
    let page = reqPage ? reqPage : 1;
 
    let offset = 0 + (page - 1) * limit;
    const job = await Job.findAndCountAll({
+      include: [
+         {
+            model: Client,
+            as: "clients",
+            include: [{ model: Account, as: "accounts", attributes: ["name"] }],
+            attributes: { exclude: ["createdAt", "updatedAt"] },
+         },
+      ],
       offset: offset,
       limit: limit,
       order: [["updatedAt", "ASC"]],
@@ -117,15 +126,34 @@ const paginationJob = async (req, res) => {
 };
 
 // get job by category
-const getJobByCategory = async (req, res) => {
+// const getJobByCategory = async (req, res) => {
+//    const data = await Job.findAll({
+//       include: [
+//          {
+//             model: Category,
+//             as: "categorys",
+//             where: {
+//                name: {
+//                   [db.Op.like]: `%${req.body.categoryName}`,
+//                },
+//             },
+//          },
+//       ],
+//    });
+
+//    res.status(200).send(data);
+// };
+
+// get job by category
+const getJobBySubCategory = async (req, res) => {
    const data = await Job.findAll({
       include: [
          {
-            model: Category,
-            as: "categorys",
+            model: SubCategory,
+            as: "subcategories",
             where: {
                name: {
-                  [db.Op.like]: `%${req.body.categoryName}`,
+                  [db.Op.like]: `%${req.params.subCategory}`,
                },
             },
          },
@@ -143,5 +171,6 @@ module.exports = {
    getJobWithClientId,
    addFavoriteJob,
    paginationJob,
-   getJobByCategory,
+
+   getJobBySubCategory,
 };

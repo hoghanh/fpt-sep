@@ -92,7 +92,7 @@ db.clients.hasMany(db.jobs, {
 
 db.jobs.belongsTo(db.clients, {
    foreignKey: "client_id",
-   as: "accounts",
+   as: "clients",
 });
 
 // Many to Many relation
