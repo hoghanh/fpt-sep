@@ -13,7 +13,7 @@ router.route("/category").get(jobController.getJobByCategory);
 
 router.route("/client/:jobID").get(jobController.getJobWithClientId);
 
-router.route("/favorite/:jobID").get(jobController.addFavoriteJob);
+router.route("/favorite/:jobID").post(jobController.addFavoriteJob);
 router
    .route("/detail/:jobID")
    .get(jobController.getJobById)
