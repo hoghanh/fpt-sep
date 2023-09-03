@@ -2,8 +2,8 @@ const db = require('../models');
 // image Upload
 
 // create main Model
-const Category = db.categorys;
-const SubCategory = db.subCategorys;
+const Category = db.categories;
+const SubCategory = db.subCategories;
 
 // main work
 
@@ -28,7 +28,7 @@ const createCategory = async (req, res) => {
 // 2. get all Category
 const getAllCategory = async (req, res) => {
   try {
-    let categorys = await Category.findAll({
+    let categories = await Category.findAll({
       include: [
         {
           model: SubCategory,
@@ -36,7 +36,7 @@ const getAllCategory = async (req, res) => {
         },
       ],
     });
-    res.status(200).send(categorys);
+    res.status(200).send(categories);
   } catch (error) {
     console.log(error);
   }
