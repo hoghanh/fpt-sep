@@ -47,51 +47,51 @@ db.favorite = require("./favoriteModel")(sequelize, DataTypes);
 // creation
 
 db.sequelize.sync({ force: false, alter: true }).then(() => {
-   console.log("yes re-sync done!");
+   console.log("re-sync done!");
 });
 
 // 1 to Many Relation
 // category_subcategory
 db.categorys.hasMany(db.subCategorys, {
-   foreignKey: "category_id",
+   foreignKey: "categoryId",
    as: "subCategorys",
 });
 
 db.subCategorys.belongsTo(db.categorys, {
-   foreignKey: "category_id",
+   foreignKey: "categoryId",
    as: "categorys",
 });
 
 // account_client
 db.accounts.hasOne(db.clients, {
-   foreignKey: "account_id",
+   foreignKey: "accountId",
    as: "clients",
 });
 
 db.clients.belongsTo(db.accounts, {
-   foreignKey: "account_id",
+   foreignKey: "accountId",
    as: "accounts",
 });
 
 // account_freelancer
 db.accounts.hasOne(db.freelancers, {
-   foreignKey: "account_id",
+   foreignKey: "accountId",
    as: "freelancers",
 });
 
 db.freelancers.belongsTo(db.accounts, {
-   foreignKey: "account_id",
+   foreignKey: "accountId",
    as: "accounts",
 });
 
 // job_client
 db.clients.hasMany(db.jobs, {
-   foreignKey: "client_id",
+   foreignKey: "clientId",
    as: "jobs",
 });
 
 db.jobs.belongsTo(db.clients, {
-   foreignKey: "client_id",
+   foreignKey: "clientId",
    as: "clients",
 });
 

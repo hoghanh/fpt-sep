@@ -156,6 +156,14 @@ const getJobBySubCategory = async (req, res) => {
                   [db.Op.like]: `%${req.params.subCategory}`,
                },
             },
+            include: [
+               {
+                  model: Category,
+                  as: "categorys",
+                  attributes: ["name"],
+               },
+            ],
+            attributes: ["name"],
          },
       ],
    });

@@ -4,6 +4,12 @@ module.exports = (sequelize, DataTypes) => {
          type: DataTypes.BOOLEAN,
          allowNull: false,
       },
+      taxCode: {
+         type: DataTypes.STRING,
+      },
+      companyWebsite: {
+         type: DataTypes.STRING,
+      },
    });
 
    return Client;

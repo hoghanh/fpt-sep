@@ -7,19 +7,23 @@ module.exports = (sequelize, DataTypes) => {
          type: DataTypes.STRING,
          allowNull: false,
       },
-      duration: {
+      fileAttachment: {
          type: DataTypes.STRING,
          allowNull: false,
       },
-      scope: {
+      proposalSubmitDeadline: {
          type: DataTypes.STRING,
          allowNull: false,
       },
-      endDate: {
+      lowestIncome: {
          type: DataTypes.STRING,
          allowNull: false,
       },
-      fee: {
+      highestIncome: {
+         type: DataTypes.STRING,
+         allowNull: false,
+      },
+      skillSets: {
          type: DataTypes.STRING,
          allowNull: false,
       },
